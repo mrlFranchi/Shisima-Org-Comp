@@ -54,8 +54,14 @@
 ;CheckMove:
 ;	
 ;
+;VictoryScreen:
+;	--Imprime a tela
+;	--se vencedor @
+;	Call ImprimeAt
+;	jmp VictoryEnd
+;	Call ImprimeCerquinha
 
-
+jmp main
 
 
 
