@@ -63,15 +63,15 @@
 
 jmp main
 
-pos1: var #0 ; Posicao da peça 1 na tela
-pos2: var #0 ; Posicao da peça 2 na tela
-pos3: var #0 ; Posicao da peça 3 na tela
-pos4: var #0 ; Posicao da peça 4 na tela
-pos5: var #0 ; Posicao da peça 5 na tela
-pos6: var #0 ; Posicao da peça 6 na tela
-pos7: var #0 ; Posicao da peça 7 na tela
-pos8: var #0 ; Posicao da peça 8 na tela
-pos9: var #0 ; Posicao da peça 9 na tela
+pos1: var #1 ; Posicao da peça 1 na tela
+pos2: var #1 ; Posicao da peça 2 na tela
+pos3: var #1 ; Posicao da peça 3 na tela
+pos4: var #1 ; Posicao da peça 4 na tela
+pos5: var #1 ; Posicao da peça 5 na tela
+pos6: var #1 ; Posicao da peça 6 na tela
+pos7: var #1 ; Posicao da peça 7 na tela
+pos8: var #1 ; Posicao da peça 8 na tela
+pos9: var #1 ; Posicao da peça 9 na tela
 
 cell: var #'0' ; celula utilizada
 
@@ -97,22 +97,57 @@ msg11: string "                INICIAR                 "
 
 ;Inicio do Programa Principal
 main:
+    loadn r0, #250
+    store pos1, r0
+    loadn r0, #172
+    store pos2, r0
+    loadn r0, #254
+    store pos3, r0
+    loadn r0, #336
+    store pos4, r0
+    loadn r0, #414
+    store pos5, r0
+    loadn r0, #492
+    store pos6, r0
+    loadn r0, #410
+    store pos7, r0
+    loadn r0, #328
+    store pos8, r0
+    loadn r0, #332
+    store pos9, r0
+    
     ;call ImprimeStart
     call ImprimeTab
-    MainLoop:
-        ;Call SelectAndMove
-        ;Call CheckVictory
-        Call ChangePlayer
+
+    loadn r2, #13 ; Caracter do enter
         
-        loadn r2, #13 ; Caracter do enter    
-    loopmenu2:
+    loopmenuT: 
         inchar r1 ; Le teclado
 
         cmp r1,r2
-        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
-        jmp loopmenu2   ; Se não, fica em loop   
-        
-        jmp MainLoop
+        jeq fim ; Se apertou enter, inicia o jogo.    
+        jmp loopmenuT   ; Se não, fica em loop    
+
+iniciaJogo:
+    
+    
+;    MainLoop:
+        ;Call SelectAndMove
+        ;Call CheckVictory
+        ;Call ChangePlayer
+;        
+;        loadn r2, #13 ; Caracter do enter
+;       
+;            
+;    loopmenu2:
+;        inchar r1 ; Le teclado
+;
+;        cmp r1,r2
+;        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
+;        jmp loopmenu2   ; Se não, fica em loop   
+;        
+;        jmp MainLoop
+    fim:
     Halt
 ; Fim do programa principal
 
@@ -138,12 +173,12 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     loadn R0, #0      ; posicao inicial tem que ser o comeco da tela!
     loadn R3, #40      ; Incremento da posicao da tela!
     loadn R4, #41      ; incremento do ponteiro das linhas da tela
-    loadn R5, #520   ; Limite da tela!
+    loadn R5, #1200   ; Limite da tela!
     
    ImprimeTela_Loop:    
         call ImprimeStr
         add r0, r0, r3      ; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
-        add r1, r1, r4      ; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 porcausa do /0 !!) --> r1 = r1 + 41
+        add r1, r1, r4      ; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 por causa do /0 !!) --> r1 = r1 + 41
         cmp r0, r5        ; Compara r0 com 1200
         jne ImprimeTela_Loop    ; Enquanto r0 < 1200
     
@@ -297,7 +332,7 @@ LinhaTab01: string "Shisima                   Jogador:      "
 LinhaTab02: string "                                        "
 LinhaTab03: string "                                        "
 LinhaTab04: string "            2                           "
-LinhaTab05: string "            @                           "
+LinhaTab05: string "            @                           ";160
 LinhaTab06: string "         1 /|\\ 3                        "
 LinhaTab07: string "          @ | @                         "
 LinhaTab08: string "         / \\|/ \\                        "
