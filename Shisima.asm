@@ -97,13 +97,22 @@ msg11: string "                INICIAR                 "
 
 ;Inicio do Programa Principal
 main:
-    call ImprimeStart
+    ;call ImprimeStart
     call ImprimeTab
-    Loop:
-        Call SelectAndMove
-        Call CheckVictory
+    MainLoop:
+        ;Call SelectAndMove
+        ;Call CheckVictory
         Call ChangePlayer
-        jmp Loop
+        
+        loadn r2, #13 ; Caracter do enter    
+    loopmenu2:
+        inchar r1 ; Le teclado
+
+        cmp r1,r2
+        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
+        jmp loopmenu2   ; Se não, fica em loop   
+        
+        jmp MainLoop
     Halt
 ; Fim do programa principal
 
@@ -205,23 +214,68 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
     loadn R4, #41      ; incremento do ponteiro das linhas da tela
     loadn R5, #1200   ; Limite da tela!
     
-   ImprimeTela_Loop:
+   ImprimeTab_Loop:
         call ImprimeStr
         add r0, r0, r3      ; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
         add r1, r1, r4      ; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 porcausa do /0 !!) --> r1 = r1 + 41
         cmp r0, r5        ; Compara r0 com 1200
-        jne ImprimeTela_Loop    ; Enquanto r0 < 1200
+        jne ImprimeTab_Loop    ; Enquanto r0 < 1200
     
     
-    loadn r2, #13 ; Caracter do enter
-        
-    loopmenu: 
-        inchar r1 ; Le teclado
+    
+    loadn R3, #'@'
+    loadn R4, #35
+    outchar R3, r4
+    
+     
+    ;iniciaJogo2:
+        pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        pop r0
+        pop fr
+        rts
 
-        cmp r1,r2
-        jeq iniciaJogo ; Se apertou enter, inicia o jogo.    
-        jmp loopmenu   ; Se não, fica em loop    
-iniciaJogo:
+ChangePlayer:;r0 jogador atual, 
+    push fr        ; Protege o registrador de flags
+    push r0    ; protege o r0 na pilha para ser usado na subrotina
+    push r1    ; protege o r1 na pilha para preservar seu valor
+    push r2    ; protege o r2 na pilha para preservar seu valor
+    push r3    ; protege o r3 na pilha para ser usado na subrotina
+    push r4    ; protege o r4 na pilha para ser usado na subrotina
+    push r5    ; protege o r5 na pilha para ser usado na subrotina
+    push r6    ; protege o r6 na pilha para ser usado na subrotina
+    push r7    ; protege o r7 na pilha para ser usado na subrotina
+    
+    
+    loadn R4, #35 ; Tela do Jogador
+    
+    load r0,jogador ;carrega jogador atual no r0
+    loadn r1,#'@'; primeiro jogador para ser comparado
+    cmp r1,r0
+    jne jog2 ;se não for o jogador 1, pula para o jogador 2
+     
+    ;Antigo Jogador era @ agora sera #
+    loadn r3,#'#' ; Novo jogador
+    outchar R3, r4
+    
+    store jogador, r3;
+    jmp changePlayerEnd ;vai pro fim
+    
+    jog2: ;Antigo Jogador era #, agora sera @
+    loadn r3,#'@' ; Novo jogador
+    outchar R3, r4
+    
+    store jogador, r3;
+    jmp changePlayerEnd ;vai pro fim
+
+
+    changePlayerEnd:
+    
+    pop r7
+    pop r6
     pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
     pop r4
     pop r3
@@ -230,15 +284,6 @@ iniciaJogo:
     pop r0
     pop fr
     rts
-
-
-
-
-
-
-
-
-
 
 
 
