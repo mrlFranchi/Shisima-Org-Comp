@@ -118,36 +118,23 @@ main:
     
     ;call ImprimeStart
     call ImprimeTab
-
-    loadn r2, #13 ; Caracter do enter
+ 
+    MainLoop:
+        ;Call SelectAndMove
+        ;Call CheckVictory
+        Call ChangePlayer
         
-    loopmenuT: 
+        loadn r2, #13 ; Caracter do enter
+       
+            
+    loopmenu2:
         inchar r1 ; Le teclado
 
         cmp r1,r2
-        jeq fim ; Se apertou enter, inicia o jogo.    
-        jmp loopmenuT   ; Se não, fica em loop    
-
-iniciaJogo:
-    
-    
-;    MainLoop:
-        ;Call SelectAndMove
-        ;Call CheckVictory
-        ;Call ChangePlayer
-;        
-;        loadn r2, #13 ; Caracter do enter
-;       
-;            
-;    loopmenu2:
-;        inchar r1 ; Le teclado
-;
-;        cmp r1,r2
-;        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
-;        jmp loopmenu2   ; Se não, fica em loop   
-;        
-;        jmp MainLoop
-    fim:
+        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
+        jmp loopmenu2   ; Se não, fica em loop   
+        
+        jmp MainLoop
     Halt
 ; Fim do programa principal
 
