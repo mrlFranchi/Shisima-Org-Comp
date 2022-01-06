@@ -73,6 +73,17 @@ pos7: var #1 ; Posicao da peça 7 na tela
 pos8: var #1 ; Posicao da peça 8 na tela
 pos9: var #1 ; Posicao da peça 9 na tela
 
+
+peca1: var #'@' ; Posicao da peça 1 na tela
+peca2: var #'@' ; Posicao da peça 2 na tela
+peca3: var #'@' ; Posicao da peça 3 na tela
+peca4: var #'O' ; Posicao da peça 4 na tela
+peca5: var #'#' ; Posicao da peça 5 na tela
+peca6: var #'#' ; Posicao da peça 6 na tela
+peca7: var #'#' ; Posicao da peça 7 na tela
+peca8: var #'O' ; Posicao da peça 8 na tela
+peca9: var #'O' ; Posicao da peça 9 na tela
+
 cell: var #'0' ; celula utilizada
 
 peca: var #'0' ; posicao da peca que sera movida
@@ -80,6 +91,8 @@ pos: var #'0' ; posicao para onde a peca sera movida
 
 jogador: var #'@'; Simbolo do Jogador atual
 vencedor: var #'!'; Simbolo do Vencedor
+
+msgV: string "Vencedor: "
 
 msg1: string "++++      SHISIMA     ++++              "
 LinhaBranco: string "                                        "
@@ -116,16 +129,46 @@ main:
     loadn r0, #332
     store pos9, r0
     
+    ;setando peças no tabuleiro
+    loadn r0, #'@'
+    store peca1, r0
+    loadn r0, #'@'
+    store peca2, r0
+    loadn r0, #'@'
+    store peca3, r0
+    loadn r0, #'O'
+    store peca4, r0
+    loadn r0, #'#'
+    store peca5, r0
+    loadn r0, #'#'
+    store peca6, r0
+    loadn r0, #'#'
+    store peca7, r0
+    loadn r0, #'O'
+    store peca8, r0
+    loadn r0, #'O'
+    store peca9, r0
+    
+    loadn r0, #'!'
+    store vencedor, r0
+    
     ;call ImprimeStart
     call ImprimeTab
+    call imprimePecas
  
     MainLoop:
         ;Call SelectAndMove
-        ;Call CheckVictory
+        
+        Call CheckVictory2
+        load r0, vencedor
+        loadn r1, #'!'
+        cmp r0,r1
+        jne temVencedor
+        
         Call ChangePlayer
         
         loadn r2, #13 ; Caracter do enter
-       
+      
             
     loopmenu2:
         inchar r1 ; Le teclado
@@ -135,12 +178,15 @@ main:
         jmp loopmenu2   ; Se não, fica em loop   
         
         jmp MainLoop
+    temVencedor:
+        Call VictoryScreen    
     Halt
 ; Fim do programa principal
 
 ; Inicio das Subrotinas
 ;
 ;
+
 
 
 ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
@@ -260,6 +306,53 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         pop fr
         rts
 
+imprimePecas:
+    push fr        ; Protege o registrador de flags
+    push r0    ; protege o r0 na pilha para preservar seu valor
+    push r1    ; protege o r1 na pilha para preservar seu valor
+    
+    load r1,peca1
+    load r0,pos1
+    outchar r1,r0
+    
+    load r1,peca2
+    load r0,pos2
+    outchar r1,r0
+    
+    load r1,peca3
+    load r0,pos3
+    outchar r1,r0
+    
+    load r1,peca4
+    load r0,pos4
+    outchar r1,r0
+    
+    load r1,peca5
+    load r0,pos5
+    outchar r1,r0
+    
+    load r1,peca6
+    load r0,pos6
+    outchar r1,r0
+    
+    load r1,peca7
+    load r0,pos7
+    outchar r1,r0
+    
+    load r1,peca8
+    load r0,pos8
+    outchar r1,r0
+    
+    load r1,peca9
+    load r0,pos9
+    outchar r1,r0
+    
+    
+    pop r1
+    pop r0
+    pop fr
+    rts
+
 ChangePlayer:;r0 jogador atual, 
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para ser usado na subrotina
@@ -308,26 +401,91 @@ ChangePlayer:;r0 jogador atual,
     rts
 
 
+CheckVictory2:
+    push fr        ; Protege o registrador de flags
+    push r0    ; protege o r0 na pilha para ser usado na subrotina
+    push r1    ; protege o r1 na pilha para preservar seu valor
 
+    loadn r1,#'O'
+    load r0, peca9
+    cmp r0,r1
+    jeq noVictory
+    
+    ;Primeiro conjunto de teste
+    load r1, peca1
+    cmp r0,r1
+    jne set2
+    load r1, peca5
+    jeq victory
+    
+    ;Segudo conjunto de teste
+    set2:
+    load r1, peca2
+    cmp r0,r1
+    jne set3
+    load r1, peca6
+    jeq victory
+    
+    ;terceiro conjunto de teste
+    set3:
+    load r1, peca3
+    cmp r0,r1
+    jne set4
+    load r1, peca7
+    jeq victory
+    
+    ;quarto conjunto de teste
+    set4:
+    load r1, peca4
+    cmp r0,r1
+    jne noVictory
+    load r1, peca8
+    jeq victory
 
+    victory:
+    store vencedor, r0;
 
+    noVictory:
+    pop r1
+    pop r0
+    pop fr
+    rts
 
-
-
+VictoryScreen:
+    push fr
+    push r0
+    push r1
+    push r2
+    
+    loadn r0, #640
+    loadn r1, #msgV
+    loadn r2, #0
+    call ImprimeStr
+    
+    load r1,vencedor
+    loadn r0, #650
+    
+    outchar r1, r0
+    
+    pop r2
+    pop r1
+    pop r0
+    pop fr
+    rts
 
 LinhaTab01: string "Shisima                   Jogador:      "
 LinhaTab02: string "                                        "
 LinhaTab03: string "                                        "
 LinhaTab04: string "            2                           "
-LinhaTab05: string "            @                           ";160
+LinhaTab05: string "                                        ";160
 LinhaTab06: string "         1 /|\\ 3                        "
-LinhaTab07: string "          @ | @                         "
+LinhaTab07: string "            |                           "
 LinhaTab08: string "         / \\|/ \\                        "
-LinhaTab09: string "      8 O---O---O 4                     "
+LinhaTab09: string "      8  --- ---  4                     "
 LinhaTab10: string "         \\ /|\\ /                        "
-LinhaTab11: string "          # | #                         "
+LinhaTab11: string "            |                           "
 LinhaTab12: string "         7 \\|/ 5                        "
-LinhaTab13: string "            #                           "
+LinhaTab13: string "                                        "
 LinhaTab14: string "            6                           "
 LinhaTab15: string "                                        "
 LinhaTab16: string "----------------------------------------"
