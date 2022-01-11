@@ -180,15 +180,15 @@ main:
         
         Call ChangePlayer
         
-        loadn r2, #13 ; Caracter do enter
+        ;loadn r2, #13 ; Caracter do enter
       
             
-    loopmenu2:
-        inchar r1 ; Le teclado
+    ;loopmenu2:
+        ;inchar r1 ; Le teclado
 
-        cmp r1,r2
-        jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
-        jmp loopmenu2   ; Se não, fica em loop
+        ;cmp r1,r2
+        ;jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
+        ;jmp loopmenu2   ; Se não, fica em loop
         jmp MainLoop
     temVencedor:
         Call VictoryScreen    
