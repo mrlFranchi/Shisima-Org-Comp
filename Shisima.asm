@@ -74,28 +74,33 @@ pos8: var #1 ; Posicao da peça 8 na tela
 pos9: var #1 ; Posicao da peça 9 na tela
 
 
-peca1: var #'@' ; Posicao da peça 1 na tela
-peca2: var #'@' ; Posicao da peça 2 na tela
-peca3: var #'@' ; Posicao da peça 3 na tela
-peca4: var #'O' ; Posicao da peça 4 na tela
-peca5: var #'#' ; Posicao da peça 5 na tela
-peca6: var #'#' ; Posicao da peça 6 na tela
-peca7: var #'#' ; Posicao da peça 7 na tela
-peca8: var #'O' ; Posicao da peça 8 na tela
-peca9: var #'O' ; Posicao da peça 9 na tela
+peca1: var #1 ; Posicao da peça 1 na tela
+peca2: var #1 ; Posicao da peça 2 na tela
+peca3: var #1 ; Posicao da peça 3 na tela
+peca4: var #1 ; Posicao da peça 4 na tela
+peca5: var #1 ; Posicao da peça 5 na tela
+peca6: var #1 ; Posicao da peça 6 na tela
+peca7: var #1 ; Posicao da peça 7 na tela
+peca8: var #1 ; Posicao da peça 8 na tela
+peca9: var #1 ; Posicao da peça 9 na tela
 
-cell: var #'0' ; celula utilizada
+cell: var #1 ; celula utilizada
 
-peca: var #'0' ; posicao da peca que sera movida
-pos: var #'0' ; posicao para onde a peca sera movida
+peca: var #1 ; posicao da peca que sera movida
+pos: var #1 ; posicao para onde a peca sera movida
 
-jogador: var #'@'; Simbolo do Jogador atual
-vencedor: var #'!'; Simbolo do Vencedor
+jogador: var #1; Simbolo do Jogador atual
+vencedor: var #1; Simbolo do Vencedor
 
 msgV: string "Vencedor: "
+msgS: string "Selecione uma peca:                    "
+msgM: string "Selecione o movimento:                 "
+msgN: string "Essa nao eh a sua peca!                "
+msgI: string "Movimento Invalido                     "
+msgInvalido: string "Caractere Invalido                   "
 
 msg1: string "++++      SHISIMA     ++++              "
-LinhaBranco: string "                                        "
+LinhaBranco: string "                                       "
 msg2: string " SHISIMA e um jogo de dois jogadores    "
 msg3: string " originado no Kenya. O objetivo do      "
 msg4: string " jogo e conseguir alinhar tres pecas    "
@@ -106,6 +111,7 @@ msg8: string " Parece um jogo simples, mas e          "
 msg9: string " necessario uma boa estrategia.         "
 msg10: string "      Pressione qualquer tecla para     "
 msg11: string "                INICIAR                 "
+
 
 
 ;Inicio do Programa Principal
@@ -152,16 +158,20 @@ main:
     loadn r0, #'!'
     store vencedor, r0
     
+    loadn r0, #'@'
+    store jogador, r0
+    
+    
     ;call ImprimeStart
     call ImprimeTab
     call imprimePecas
  
     MainLoop:
-        ;Call SelectAndMove
+        Call SelectAndMove
         
         Call CheckVictory2
         load r0, vencedor
-        loadn r1, #'!'
+        loadn r1,#'!'
         cmp r0,r1
         jne temVencedor
         
@@ -175,8 +185,7 @@ main:
 
         cmp r1,r2
         jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
-        jmp loopmenu2   ; Se não, fica em loop   
-        
+        jmp loopmenu2   ; Se não, fica em loop
         jmp MainLoop
     temVencedor:
         Call VictoryScreen    
@@ -291,7 +300,7 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
     
     
     
-    loadn R3, #'@'
+    load R3, jogador
     loadn R4, #35
     outchar R3, r4
     
@@ -416,6 +425,7 @@ CheckVictory2:
     cmp r0,r1
     jne set2
     load r1, peca5
+    cmp r0,r1
     jeq victory
     
     ;Segudo conjunto de teste
@@ -424,6 +434,7 @@ CheckVictory2:
     cmp r0,r1
     jne set3
     load r1, peca6
+    cmp r0,r1
     jeq victory
     
     ;terceiro conjunto de teste
@@ -432,6 +443,7 @@ CheckVictory2:
     cmp r0,r1
     jne set4
     load r1, peca7
+    cmp r0,r1
     jeq victory
     
     ;quarto conjunto de teste
@@ -440,8 +452,9 @@ CheckVictory2:
     cmp r0,r1
     jne noVictory
     load r1, peca8
+    cmp r0,r1
     jeq victory
-
+    jmp noVictory
     victory:
     store vencedor, r0;
 
@@ -472,6 +485,264 @@ VictoryScreen:
     pop r0
     pop fr
     rts
+
+RecebeChar:
+	push r1
+	loadn r1, #255
+	RecebeCharLoop:
+	    inchar r0 ; o Inchar devolve 255 se nenhuma tecla esta sendo precionada, então ao esperar uma tecla, ele fica testando até alguem apertar algo
+	    cmp r0, r1
+	    jeq RecebeCharLoop
+	pop r1
+	rts
+
+Select: ;select 
+    push fr
+    push r1
+    push r2
+    push r3
+    push r4
+    push r5
+    push r6
+    push r7
+
+    loadn r6,#'1'
+    loadn r5,#'9'
+    
+    selectLoop:
+        call RecebeChar;
+        mov r7, r0
+        cmp r7, r6
+        jle caractereInvalido
+        cmp r7, r5
+        jgr caractereInvalido
+        
+        loadn r0, #720
+        loadn r1, #LinhaBranco
+        loadn r2, #0
+        call ImprimeStr
+        jmp selectEnd
+        
+
+    caractereInvalido:
+        loadn r0, #720
+        loadn r1, #msgInvalido
+        loadn r2, #0
+        call ImprimeStr
+        jmp selectLoop
+    
+    
+    selectEnd:
+    mov r0, r7
+    pop r7
+    pop r6
+    pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    pop fr
+    rts
+
+SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para onde sera movida, r5 offset da peça, r4 jogador atual
+    push fr
+    push r0
+    push r1
+    push r2
+    push r3
+    push r4
+    push r5
+    push r6
+    push r7
+    
+        load r4, jogador
+    selectMLoop:
+        loadn r0, #640
+        loadn r1, #msgS
+        loadn r2, #0
+        call ImprimeStr
+        call Select; retorna no r0 o caractere que quer mover
+        ;imprimindo peça que sera movida
+        loadn r2, #662
+        outchar r0, r2
+        
+        loadn r1,#'1'
+        sub r5,r0,r1; r5=r0-r1
+        loadn r7, #peca1 ;Endereço da peça 1    
+        add r7,r7,r5; soma a peca a ser mexida r7 = r7+r5
+        loadi r3,r7; carrega valor da peca ser mexida r3 =
+        cmp r3,r4
+        jeq move
+        loadn r0, #720
+        loadn r1, #msgN
+        loadn r2, #0
+        call ImprimeStr
+        jmp selectMLoop
+        
+    move:
+        loadn r0, #680
+        loadn r1, #msgM
+        loadn r2, #0
+        call ImprimeStr
+        loadn r1,#'1'
+        
+        call Select
+        loadn r2, #702
+        outchar r0, r2
+        
+        sub r3,r0,r1; r3-> offset do local para onde sera mexido
+        cmp r3,r5
+        jne moveCase1
+        localInvalido:
+            loadn r0, #720
+            loadn r1, #msgI
+            loadn r2, #0
+            call ImprimeStr
+            jmp selectMLoop
+            
+        moveCase1:
+            loadn r1, #0
+            cmp r5, r1
+            jne moveCase2
+            loadn r1, #7
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #1
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase2:
+            loadn r1, #1
+            cmp r5, r1
+            jne moveCase3
+            loadn r1, #0
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #2
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+            
+        moveCase3:
+            loadn r1, #2
+            cmp r5, r1
+            jne moveCase4
+            loadn r1, #1
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #3
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase4:
+            loadn r1, #3
+            cmp r5, r1
+            jne moveCase5
+            loadn r1, #2
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #4
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase5:
+            loadn r1, #4
+            cmp r5, r1
+            jne moveCase6
+            loadn r1, #3
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #5
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase6:
+            loadn r1, #5
+            cmp r5, r1
+            jne moveCase7
+            loadn r1, #4
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #6
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase7:
+            loadn r1, #6
+            cmp r5, r1
+            jne moveCase8
+            loadn r1, #5
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #7
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveCase8:
+            loadn r1, #7
+            cmp r5, r1
+            jne moveValido
+            loadn r1, #6
+            cmp r3, r1
+            jeq moveValido
+            loadn r1, #0
+            cmp r3, r1
+            jeq moveValido
+            jmp moveSwitchFim
+        
+        moveSwitchFim:
+            loadn r1, #8
+            cmp r3, r1
+            
+            jeq moveValido
+            jmp localInvalido
+        
+        
+        
+    moveValido:
+        loadn r6,#peca1
+        add r6, r6, r3;
+        loadn r3, #'O'
+        
+        loadi r1, r6
+        cmp r1,r3
+        jne localInvalido
+        
+        storei r7, r3
+        load r3, jogador
+        storei r6,r3
+        call imprimePecas
+        
+        loadn r0, #640
+        loadn r1, #LinhaBranco
+        loadn r2, #0
+        call ImprimeStr
+        loadn r0, #680
+        call ImprimeStr
+        loadn r0, #720
+        call ImprimeStr
+
+    
+        
+         
+    
+    pop r7
+    pop r6
+    pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    pop r0
+    pop fr
+    rts
+
 
 LinhaTab01: string "Shisima                   Jogador:      "
 LinhaTab02: string "                                        "
@@ -505,4 +776,11 @@ LinhaTab29: string "                                        "
 LinhaTab30: string "                                        "
 
 
+linhaVic01: string " \\ \\    / (_)    | |                   "
+linhaVic02: string "  \\ \\  / / _  ___| |_ ___  _ __ _   _  "
+linhaVic03: string "   \\ \\/ / | |/ __| __/ _ \\| '__| | | | "
+linhaVic04: string "    \\  /  | | (__| || (_) | |  | |_| | "
+linhaVic05: string "     \\/   |_|\\___|\\__\\___/|_|   \\__, | "
+linhaVic06: string "                                 __/ | "
+linhaVic07: string "                                |___/  "
 
