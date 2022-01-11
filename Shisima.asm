@@ -1,3 +1,6 @@
+
+;oi murilo teste sem cmd 
+
 ; Estrutura
 ; Jogo Shisima
 ;main:
