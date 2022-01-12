@@ -1,6 +1,4 @@
 
-
-
 ; Estrutura
 ; Jogo Shisima
 ;main:
@@ -63,6 +61,14 @@
 ;    Call ImprimeAt
 ;    jmp VictoryEnd
 ;    Call ImprimeCerquinha
+
+;********************************************************;
+;            TRABALHO ORG COMP -  SHISIMA                ;
+;********************************************************;
+;  - Luiz Henrique Benedito Belorio, nUSP: 12563814      ;
+;  - Murilo Franchi, nUSP: 9790760                       ;
+;********************************************************; 
+
 
 jmp main
 
@@ -134,7 +140,10 @@ LinhaBranco17: string "                                       "
 LinhaBranco18: string "                                       "
 
 
-;Inicio do Programa Principal
+;********************************************************;
+;                - PROGRAMA PRINCIPAL -                  ;
+;********************************************************; 
+
 main:
     loadn r0, #250
     store pos1, r0
@@ -210,14 +219,17 @@ main:
         jmp MainLoop
     temVencedor:
         Call VictoryScreen    
-    Halt
-; Fim do programa principal
+Halt
 
-; Inicio das Subrotinas
-;
-;
+;********************************************************;
+;              - FIM DO PROGRAMA PRINCIPAL -             ;
+;********************************************************;
 
 
+
+;********************************************************;
+;                - INICIO DAS SUBROTINAS -               ;
+;********************************************************;
 
 ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
         ;  r1 = endereco onde comeca a primeira linha do Cenario
@@ -263,7 +275,7 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     pop r0
     pop fr
 rts
-    
+
 ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para preservar seu valor
@@ -291,7 +303,7 @@ ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         ;  r1 = endereco onde comeca a primeira linha do Cenario
@@ -334,7 +346,7 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         pop r1
         pop r0
         pop fr
-        rts
+rts
 
 imprimePecas:
     push fr        ; Protege o registrador de flags
@@ -381,7 +393,7 @@ imprimePecas:
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 ChangePlayer:;r0 jogador atual, 
     push fr        ; Protege o registrador de flags
@@ -428,8 +440,7 @@ ChangePlayer:;r0 jogador atual,
     pop r1
     pop r0
     pop fr
-    rts
-
+rts
 
 CheckVictory2:
     push fr        ; Protege o registrador de flags
@@ -483,7 +494,7 @@ CheckVictory2:
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 VictoryScreen:
          ;  Rotina de Impresao de Cenario na Tela Inteira
@@ -579,7 +590,6 @@ ImprimeVencedor:
     pop fr
 rts
 
-
 RecebeChar:
 	push r1
 	loadn r1, #255
@@ -588,7 +598,7 @@ RecebeChar:
 	    cmp r0, r1
 	    jeq RecebeCharLoop
 	pop r1
-	rts
+rts
 
 Select: ;select 
     push fr
@@ -636,7 +646,7 @@ Select: ;select
     pop r2
     pop r1
     pop fr
-    rts
+rts
 
 SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para onde sera movida, r5 offset da peça, r4 jogador atual
     push fr
@@ -835,8 +845,17 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
+;********************************************************;
+;                 - FIM DAS SUBROTINAS -                 ; 
+;********************************************************;
+
+
+
+;********************************************************;
+;                  - TELAS DO PROGRAMA -                 ;
+;********************************************************;
 
 LinhaTab01: string "Shisima                   Jogador:      "
 LinhaTab02: string "                                        "
