@@ -1,5 +1,5 @@
 
-;oi murilo teste sem cmd aaaaaaaaaaaaaaaaaaaa
+
 
 ; Estrutura
 ; Jogo Shisima
@@ -114,7 +114,24 @@ msg8: string " Parece um jogo simples, mas e          "
 msg9: string " necessario uma boa estrategia.         "
 msg10: string "      Pressione qualquer tecla para     "
 msg11: string "                INICIAR                 "
-
+LinhaBranco1: string "                                       "
+LinhaBranco2: string "                                       "
+LinhaBranco3: string "                                       "
+LinhaBranco4: string "                                       "
+LinhaBranco5: string "                                       "
+LinhaBranco6: string "                                       "
+LinhaBranco7: string "                                       "
+LinhaBranco8: string "                                       "
+LinhaBranco9: string "                                       "
+LinhaBranco10: string "                                       "
+LinhaBranco11: string "                                       "
+LinhaBranco12: string "                                       "
+LinhaBranco13: string "                                       "
+LinhaBranco14: string "                                       "
+LinhaBranco15: string "                                       "
+LinhaBranco16: string "                                       "
+LinhaBranco17: string "                                       "
+LinhaBranco18: string "                                       "
 
 
 ;Inicio do Programa Principal
@@ -165,7 +182,7 @@ main:
     store jogador, r0
     
     
-    ;call ImprimeStart
+    call ImprimeStart
     call ImprimeTab
     call imprimePecas
  
@@ -184,6 +201,7 @@ main:
       
             
     ;loopmenu2:
+
         ;inchar r1 ; Le teclado
 
         ;cmp r1,r2
@@ -236,7 +254,7 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
         jeq iniciaJogo ; Se apertou enter, inicia o jogo.    
         jmp loopmenu   ; Se não, fica em loop    
 
-iniciaJogo:
+        iniciaJogo:
     pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
     pop r4
     pop r3
@@ -244,7 +262,7 @@ iniciaJogo:
     pop r1
     pop r0
     pop fr
-    rts
+rts
     
 ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
     push fr        ; Protege o registrador de flags
@@ -468,26 +486,99 @@ CheckVictory2:
     rts
 
 VictoryScreen:
-    push fr
-    push r0
-    push r1
-    push r2
+         ;  Rotina de Impresao de Cenario na Tela Inteira
+        ;  r1 = endereco onde comeca a primeira linha do Cenario
+        ;  r2 = cor do Cenario para ser impresso
+
+    push fr        ; Protege o registrador de flags
+    push r0    ; protege o r3 na pilha para ser usado na subrotina
+    push r1    ; protege o r1 na pilha para preservar seu valor
+    push r2    ; protege o r1 na pilha para preservar seu valor
+    push r3    ; protege o r3 na pilha para ser usado na subrotina
+    push r4    ; protege o r4 na pilha para ser usado na subrotina
+    push r5    ; protege o r4 na pilha para ser usado na subrotina
+
+    loadn R1, #linhaVic00
+    loadn R2, #0
+    loadn R0, #640      ; posicao inicial tem que ser o comeco da tela!
+    loadn R3, #40      ; Incremento da posicao da tela!
+    loadn R4, #41      ; incremento do ponteiro das linhas da tela
+    loadn R5, #960   ; Limite da tela!
     
-    loadn r0, #640
-    loadn r1, #msgV
-    loadn r2, #0
-    call ImprimeStr
+   ImprimeVitoria_Loop:    
+        call ImprimeStr
+        add r0, r0, r3      ; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
+        add r1, r1, r4      ; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 por causa do /0 !!) --> r1 = r1 + 41
+        cmp r0, r5        ; Compara r0 com 1200
+        jne ImprimeVitoria_Loop    ; Enquanto r0 < 1200
     
-    load r1,vencedor
-    loadn r0, #650
     
-    outchar r1, r0
+    loadn r6, #'#'
+    load r7, vencedor
+    cmp r6, r7
+    jeq VencedorCerquinha
+    loadn r1, #arrobinhaLin01
+    jmp VencedorImprime
     
+    VencedorCerquinha:
+        loadn r1, #cerquinhaLin01
+    VencedorImprime:
+        call ImprimeVencedor    
+        
+    loadn r2, #13 ; Caracter do enter
+        
+    loopVic: 
+        inchar r1 ; Le teclado
+        cmp r1,r2
+        jeq iniciaJogo ; Se apertou enter, inicia o jogo.    
+        jmp loopVic   ; Se não, fica em loop    
+
+        iniciaJogo:
+    pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+    pop r4
+    pop r3
     pop r2
     pop r1
     pop r0
     pop fr
-    rts
+rts
+
+ImprimeVencedor:
+         ;  Rotina de Impresao de Cenario na Tela Inteira
+        ;  r1 = endereco onde comeca a primeira linha do Cenario
+        ;  r2 = cor do Cenario para ser impresso
+
+    push fr        ; Protege o registrador de flags
+    push r0    ; protege o r3 na pilha para ser usado na subrotina
+    push r2    ; protege o r1 na pilha para preservar seu valor
+    push r3    ; protege o r3 na pilha para ser usado na subrotina
+    push r4    ; protege o r4 na pilha para ser usado na subrotina
+    push r5    ; protege o r4 na pilha para ser usado na subrotina
+
+    loadn R2, #0
+    loadn R0, #960      ; posicao inicial tem que ser o comeco da tela!
+    loadn R3, #40      ; Incremento da posicao da tela!
+    loadn R4, #41      ; incremento do ponteiro das linhas da tela
+    loadn R5, #1200   ; Limite da tela!
+    
+   ImprimeVencedor_Loop:    
+        call ImprimeStr
+        add r0, r0, r3      ; incrementaposicao para a segunda linha na tela -->  r0 = R0 + 40
+        add r1, r1, r4      ; incrementa o ponteiro para o comeco da proxima linha na memoria (40 + 1 por causa do /0 !!) --> r1 = r1 + 41
+        cmp r0, r5        ; Compara r0 com 1200
+        jne ImprimeVencedor_Loop    ; Enquanto r0 < 1200
+    
+    
+  
+    pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
+    pop r4
+    pop r3
+    pop r2
+
+    pop r0
+    pop fr
+rts
+
 
 RecebeChar:
 	push r1
@@ -778,12 +869,26 @@ LinhaTab28: string "                                        "
 LinhaTab29: string "                                        "
 LinhaTab30: string "                                        "
 
-
+linhaVic00: string "                                        "
 linhaVic01: string " \\ \\    / (_)    | |                   "
-linhaVic02: string "  \\ \\  / / _  ___| |_ ___  _ __ _   _  "
-linhaVic03: string "   \\ \\/ / | |/ __| __/ _ \\| '__| | | | "
-linhaVic04: string "    \\  /  | | (__| || (_) | |  | |_| | "
-linhaVic05: string "     \\/   |_|\\___|\\__\\___/|_|   \\__, | "
-linhaVic06: string "                                 __/ | "
-linhaVic07: string "                                |___/  "
+linhaVic02: string "   \\ \\  / / _  ___| |_ ___  _ __ _   _  "
+linhaVic03: string "    \\ \\/ / | |/ __| __/ _ \\| '__| | | | "
+linhaVic04: string "     \\  /  | | (__| || (_) | |  | |_| | "
+linhaVic05: string "      \\/   |_|\\___|\\__\\___/|_|   \\__, | "
+linhaVic06: string "                                  __/ | "
+linhaVic07: string "                                 |___/  "
 
+cerquinhaLin01: string "                  _  _                  "  
+cerquinhaLin02: string "                _| || |_                "
+cerquinhaLin03: string "               |_  __  _|               "
+cerquinhaLin04: string "                _| || |_                "
+cerquinhaLin05: string "               |_  __  _|               "
+cerquinhaLin06: string "                 |_||_|                 "
+                
+arrobinhaLin01: string "                   ____                 "
+arrobinhaLin02: string "                  / __ \\                " 
+arrobinhaLin03: string "                 / / _` |               "         
+arrobinhaLin04: string "                 | |(_| |              "
+arrobinhaLin05: string "                  \\ \\__,_|              "
+arrobinhaLin06: string "                   \\____/              " 
+          
