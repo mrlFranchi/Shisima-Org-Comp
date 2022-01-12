@@ -58,6 +58,14 @@
 ;    jmp VictoryEnd
 ;    Call ImprimeCerquinha
 
+;********************************************************;
+;            TRABALHO ORG COMP -  SHISIMA                ;
+;********************************************************;
+;  - Luiz Henrique Benedito Belorio, nUSP: 12563814      ;
+;  - Murilo Franchi, nUSP: 9790760                       ;
+;********************************************************; 
+
+
 jmp main
 
 pos1: var #1 ; Posicao da peça 1 na tela
@@ -124,7 +132,10 @@ LinhaBranco17: string "                                       "
 LinhaBranco18: string "                                       "
 
 
-;Inicio do Programa Principal
+;********************************************************;
+;                - PROGRAMA PRINCIPAL -                  ;
+;********************************************************; 
+
 main:
     ;setando a posição das peças na tela
     loadn r0, #250
@@ -193,13 +204,18 @@ main:
         jmp MainLoop
     temVencedor:
         Call VictoryScreen    
-    Halt
-; Fim do programa principal
+Halt
 
-; Inicio das Subrotinas
-;
-;
+;********************************************************;
+;              - FIM DO PROGRAMA PRINCIPAL -             ;
+;********************************************************;
 
+
+
+
+;********************************************************;
+;                - INICIO DAS SUBROTINAS -               ;
+;********************************************************;
 
 ; Função adaptada de Imprime Tela da Nave11, para imprimir a tela inicial
 ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
@@ -247,7 +263,6 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     pop fr
 rts
 
-
 ;Função de imprimir uma string, retirada do código da Nave11
 ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
     push fr        ; Protege o registrador de flags
@@ -276,7 +291,7 @@ ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 
 
@@ -320,7 +335,7 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         pop r1
         pop r0
         pop fr
-        rts
+rts
 
 
 ;imprime as pecas em suas respectivas posicoes.
@@ -369,7 +384,7 @@ imprimePecas:
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 ;Troca o jogador atual
 ChangePlayer:;r0 jogador atual, 
@@ -409,8 +424,11 @@ ChangePlayer:;r0 jogador atual,
     pop fr
     rts
 
+
 ;Checa se existe uma condição vitoriosa no tabuleiro
 CheckVictory2:; r0 peça do centro, r1 peça que esta sendo comparada
+
+
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para ser usado na subrotina
     push r1    ; protege o r1 na pilha para preservar seu valor
@@ -470,7 +488,7 @@ CheckVictory2:; r0 peça do centro, r1 peça que esta sendo comparada
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
 
 VictoryScreen:
@@ -578,7 +596,7 @@ RecebeChar:
 	    cmp r0, r1
 	    jeq RecebeCharLoop
 	pop r1
-	rts
+rts
 
 ;Recebe um caractere e verifica se ele é valido (entre 1 e 9)
 Select: ;seleciona a peça e verifica se ela é 
@@ -626,7 +644,7 @@ Select: ;seleciona a peça e verifica se ela é
     pop r2
     pop r1
     pop fr
-    rts
+rts
 
 
 ;Seleciona Peça e Move ela
@@ -831,8 +849,17 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
     pop r1
     pop r0
     pop fr
-    rts
+rts
 
+;********************************************************;
+;                 - FIM DAS SUBROTINAS -                 ; 
+;********************************************************;
+
+
+
+;********************************************************;
+;                  - TELAS DO PROGRAMA -                 ;
+;********************************************************;
 
 LinhaTab01: string "Shisima                   Jogador:      "
 LinhaTab02: string "                                        "
