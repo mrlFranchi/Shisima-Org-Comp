@@ -201,7 +201,8 @@ main:
       
             
     ;loopmenu2:
-       ; inchar r1 ; Le teclado
+
+        ;inchar r1 ; Le teclado
 
         ;cmp r1,r2
         ;jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
