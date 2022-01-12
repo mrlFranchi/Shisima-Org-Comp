@@ -1,6 +1,3 @@
-
-
-
 ; Estrutura
 ; Jogo Shisima
 ;main:
@@ -50,9 +47,6 @@
 ;ChangePlayer:
 ;    --seta player que vai jogar
 ;
-;GetCell:
-;    --le o teclado até que um numero seja digitado
-;
 ;
 ;CheckMove:
 ;    
@@ -87,10 +81,6 @@ peca7: var #1 ; Posicao da peça 7 na tela
 peca8: var #1 ; Posicao da peça 8 na tela
 peca9: var #1 ; Posicao da peça 9 na tela
 
-cell: var #1 ; celula utilizada
-
-peca: var #1 ; posicao da peca que sera movida
-pos: var #1 ; posicao para onde a peca sera movida
 
 jogador: var #1; Simbolo do Jogador atual
 vencedor: var #1; Simbolo do Vencedor
@@ -136,6 +126,7 @@ LinhaBranco18: string "                                       "
 
 ;Inicio do Programa Principal
 main:
+    ;setando a posição das peças na tela
     loadn r0, #250
     store pos1, r0
     loadn r0, #172
@@ -175,21 +166,23 @@ main:
     loadn r0, #'O'
     store peca9, r0
     
-    loadn r0, #'!'
-    store vencedor, r0
+    loadn r0, #'!' 
+    store vencedor, r0; Guarda o valor do vencedor padrão '!'
     
     loadn r0, #'@'
-    store jogador, r0
+    store jogador, r0; Guarda o valor do primeiro Jogador
     
     
-    call ImprimeStart
+    call ImprimeStart ; Imprime a tela inicial
     call ImprimeTab
     call imprimePecas
  
     MainLoop:
+        ;Chama a função para selecionar e mover uma peça
         Call SelectAndMove
         
         Call CheckVictory2
+        ;Verifica se o vencedor é diferente do defaul '!'
         load r0, vencedor
         loadn r1,#'!'
         cmp r0,r1
@@ -197,16 +190,6 @@ main:
         
         Call ChangePlayer
         
-        ;loadn r2, #13 ; Caracter do enter
-      
-            
-    ;loopmenu2:
-
-        ;inchar r1 ; Le teclado
-
-        ;cmp r1,r2
-        ;jeq MainLoop ; Se apertou enter, Volta pro começo do jogo.    
-        ;jmp loopmenu2   ; Se não, fica em loop
         jmp MainLoop
     temVencedor:
         Call VictoryScreen    
@@ -218,7 +201,7 @@ main:
 ;
 
 
-
+; Função adaptada de Imprime Tela da Nave11, para imprimir a tela inicial
 ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
         ;  r1 = endereco onde comeca a primeira linha do Cenario
         ;  r2 = cor do Cenario para ser impresso
@@ -229,7 +212,7 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     push r2    ; protege o r1 na pilha para preservar seu valor
     push r3    ; protege o r3 na pilha para ser usado na subrotina
     push r4    ; protege o r4 na pilha para ser usado na subrotina
-    push r5    ; protege o r4 na pilha para ser usado na subrotina
+    push r5    ; protege o r5 na pilha para ser usado na subrotina
 
     loadn R1, #msg1
     loadn R2, #0
@@ -263,7 +246,9 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     pop r0
     pop fr
 rts
-    
+
+
+;Função de imprimir uma string, retirada do código da Nave11
 ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o primeiro caractere da mensagem sera' impresso;  r1 = endereco onde comeca a mensagem; r2 = cor da mensagem.   Obs: a mensagem sera' impressa ate' encontrar "/0"
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para preservar seu valor
@@ -293,6 +278,9 @@ ImprimeStr:    ;  Rotina de Impresao de Mensagens:    r0 = Posicao da tela que o
     pop fr
     rts
 
+
+
+;Função para imprimir a tabela do jogo na tela, adaptada da função da Nave11
 ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         ;  r1 = endereco onde comeca a primeira linha do Cenario
         ;  r2 = cor do Cenario para ser impresso
@@ -320,13 +308,11 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         jne ImprimeTab_Loop    ; Enquanto r0 < 1200
     
     
-    
+    ;imprime o jogador inicial
     load R3, jogador
     loadn R4, #35
     outchar R3, r4
     
-     
-    ;iniciaJogo2:
         pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
         pop r4
         pop r3
@@ -336,6 +322,8 @@ ImprimeTab: ;  Rotina de Impresao de Cenario na Tela Inteira
         pop fr
         rts
 
+
+;imprime as pecas em suas respectivas posicoes.
 imprimePecas:
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para preservar seu valor
@@ -383,19 +371,17 @@ imprimePecas:
     pop fr
     rts
 
+;Troca o jogador atual
 ChangePlayer:;r0 jogador atual, 
-    push fr        ; Protege o registrador de flags
+    push fr    ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para ser usado na subrotina
     push r1    ; protege o r1 na pilha para preservar seu valor
     push r2    ; protege o r2 na pilha para preservar seu valor
     push r3    ; protege o r3 na pilha para ser usado na subrotina
     push r4    ; protege o r4 na pilha para ser usado na subrotina
-    push r5    ; protege o r5 na pilha para ser usado na subrotina
-    push r6    ; protege o r6 na pilha para ser usado na subrotina
-    push r7    ; protege o r7 na pilha para ser usado na subrotina
     
     
-    loadn R4, #35 ; Tela do Jogador
+    loadn R4, #35 ; local na Tela do Jogador
     
     load r0,jogador ;carrega jogador atual no r0
     loadn r1,#'@'; primeiro jogador para ser comparado
@@ -414,15 +400,8 @@ ChangePlayer:;r0 jogador atual,
     outchar R3, r4
     
     store jogador, r3;
-    jmp changePlayerEnd ;vai pro fim
-
-
     changePlayerEnd:
-    
-    pop r7
-    pop r6
-    pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
-    pop r4
+    pop r4    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
     pop r3
     pop r2
     pop r1
@@ -430,26 +409,31 @@ ChangePlayer:;r0 jogador atual,
     pop fr
     rts
 
-
-CheckVictory2:
+;Checa se existe uma condição vitoriosa no tabuleiro
+CheckVictory2:; r0 peça do centro, r1 peça que esta sendo comparada
     push fr        ; Protege o registrador de flags
     push r0    ; protege o r0 na pilha para ser usado na subrotina
     push r1    ; protege o r1 na pilha para preservar seu valor
 
+    ;A condicao de vitoria implica que tem uma peca nao vazia no centro do tabuleiro
+    ;Carregamos a peca do centro e comparamos com uma casa vazia
     loadn r1,#'O'
     load r0, peca9
     cmp r0,r1
-    jeq noVictory
+    jeq noVictory ; Se for igual, nao ha vencedores
     
-    ;Primeiro conjunto de teste
+    ;Primeiro conjunto de teste, as posições 1 e 5 devem ter o mesmo caractere par aser vencedor
+    ;Carrega peça1
     load r1, peca1
-    cmp r0,r1
-    jne set2
-    load r1, peca5
-    cmp r0,r1
-    jeq victory
+    cmp r0,r1       ;compar a peça 1 com o centro
+    jne set2        ;se não for igual, pula para o proximo conjunto de teste
+    load r1, peca5  ;se for igual continua e carrega a peça 5
+    cmp r0,r1       ;compara com o centro
+    jeq victory     ;se for igual, existe um vencedor
     
-    ;Segudo conjunto de teste
+    
+    
+    ;Segudo conjunto de teste, idem ao set1, mas com as peças 2 e 6
     set2:
     load r1, peca2
     cmp r0,r1
@@ -458,7 +442,7 @@ CheckVictory2:
     cmp r0,r1
     jeq victory
     
-    ;terceiro conjunto de teste
+    ;terceiro conjunto de teste, idem ao set1, mas com as peças 3 e 7
     set3:
     load r1, peca3
     cmp r0,r1
@@ -467,7 +451,7 @@ CheckVictory2:
     cmp r0,r1
     jeq victory
     
-    ;quarto conjunto de teste
+    ;quarto conjunto de teste, semelhate ao set1, mas se a peça 4 ou 8 for diferente do centro, não ha vencedores ainda
     set4:
     load r1, peca4
     cmp r0,r1
@@ -476,34 +460,39 @@ CheckVictory2:
     cmp r0,r1
     jeq victory
     jmp noVictory
+    
+    ;em uma vitoria, carrega a peça central do jogador vitorioso na memoria
     victory:
     store vencedor, r0;
 
+    ;se não ouver vitorio só retorna
     noVictory:
     pop r1
     pop r0
     pop fr
     rts
 
+
 VictoryScreen:
-         ;  Rotina de Impresao de Cenario na Tela Inteira
-        ;  r1 = endereco onde comeca a primeira linha do Cenario
-        ;  r2 = cor do Cenario para ser impresso
+         ;  Rotina de Impresao da tela de vitoria
 
     push fr        ; Protege o registrador de flags
-    push r0    ; protege o r3 na pilha para ser usado na subrotina
+    push r0    ; protege o r0 na pilha para ser usado na subrotina
     push r1    ; protege o r1 na pilha para preservar seu valor
-    push r2    ; protege o r1 na pilha para preservar seu valor
+    push r2    ; protege o r2 na pilha para preservar seu valor
     push r3    ; protege o r3 na pilha para ser usado na subrotina
     push r4    ; protege o r4 na pilha para ser usado na subrotina
-    push r5    ; protege o r4 na pilha para ser usado na subrotina
-
-    loadn R1, #linhaVic00
-    loadn R2, #0
-    loadn R0, #640      ; posicao inicial tem que ser o comeco da tela!
+    push r5    ; protege o r5 na pilha para ser usado na subrotina
+    push r6    ; protege o r5 na pilha para ser usado na subrotina
+    push r7    ; protege o r5 na pilha para ser usado na subrotina
+    
+    loadn R1, #linhaVic00   ; Primeira linha da Tela
+    loadn R2, #0            ; cor
+    loadn R0, #640          ; posicao inicial, segunda metade da tela
     loadn R3, #40      ; Incremento da posicao da tela!
     loadn R4, #41      ; incremento do ponteiro das linhas da tela
-    loadn R5, #960   ; Limite da tela!
+    loadn R5, #960   ; fim da mensagemd e vitoria
+    
     
    ImprimeVitoria_Loop:    
         call ImprimeStr
@@ -513,6 +502,7 @@ VictoryScreen:
         jne ImprimeVitoria_Loop    ; Enquanto r0 < 1200
     
     
+    ;verifica o vencedor e imprime respectiva ASCII art
     loadn r6, #'#'
     load r7, vencedor
     cmp r6, r7
@@ -533,7 +523,8 @@ VictoryScreen:
         jeq iniciaJogo ; Se apertou enter, inicia o jogo.    
         jmp loopVic   ; Se não, fica em loop    
 
-        iniciaJogo:
+    pop r7
+    pop r6
     pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
     pop r4
     pop r3
@@ -543,14 +534,14 @@ VictoryScreen:
     pop fr
 rts
 
-ImprimeVencedor:
-         ;  Rotina de Impresao de Cenario na Tela Inteira
+ImprimeVencedor:; recebe qual de vencedor sera impresso
+        ;  Rotina de Impresao de Cenario na Tela Inteira
         ;  r1 = endereco onde comeca a primeira linha do Cenario
         ;  r2 = cor do Cenario para ser impresso
 
     push fr        ; Protege o registrador de flags
-    push r0    ; protege o r3 na pilha para ser usado na subrotina
-    push r2    ; protege o r1 na pilha para preservar seu valor
+    push r0    ; protege o r0 na pilha para ser usado na subrotina
+    push r2    ; protege o r2 na pilha para preservar seu valor
     push r3    ; protege o r3 na pilha para ser usado na subrotina
     push r4    ; protege o r4 na pilha para ser usado na subrotina
     push r5    ; protege o r4 na pilha para ser usado na subrotina
@@ -574,12 +565,11 @@ ImprimeVencedor:
     pop r4
     pop r3
     pop r2
-
     pop r0
     pop fr
 rts
 
-
+;Recebe um caractere do teclado, adaptado do código de forca e retorna no r0
 RecebeChar:
 	push r1
 	loadn r1, #255
@@ -590,34 +580,36 @@ RecebeChar:
 	pop r1
 	rts
 
-Select: ;select 
+;Recebe um caractere e verifica se ele é valido (entre 1 e 9)
+Select: ;seleciona a peça e verifica se ela é 
     push fr
     push r1
     push r2
-    push r3
-    push r4
     push r5
     push r6
     push r7
 
+    ;carrega os caracteres '1' e '9'
     loadn r6,#'1'
     loadn r5,#'9'
     
     selectLoop:
+        ;recebe um char e move para o r7 (para se precisar imprimir uma msg
         call RecebeChar;
         mov r7, r0
         cmp r7, r6
-        jle caractereInvalido
+        jle caractereInvalido   ; Se for menor que '1' não é um caractere valido
         cmp r7, r5
-        jgr caractereInvalido
+        jgr caractereInvalido   ; Se for maior que '9' também não é valido
         
+        ; imprime limpa a linha caso tenha msg de erro
         loadn r0, #720
         loadn r1, #LinhaBranco
         loadn r2, #0
         call ImprimeStr
         jmp selectEnd
         
-
+    ; imprime msg de erro e tenta receber novo caractere
     caractereInvalido:
         loadn r0, #720
         loadn r1, #msgInvalido
@@ -631,13 +623,13 @@ Select: ;select
     pop r7
     pop r6
     pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
-    pop r4
-    pop r3
     pop r2
     pop r1
     pop fr
     rts
 
+
+;Seleciona Peça e Move ela
 SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para onde sera movida, r5 offset da peça, r4 jogador atual
     push fr
     push r0
@@ -649,43 +641,46 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
     push r6
     push r7
     
+        ; carrega jogador atual
         load r4, jogador
     selectMLoop:
         loadn r0, #640
         loadn r1, #msgS
         loadn r2, #0
-        call ImprimeStr
+        call ImprimeStr; Imprime msg na tela
         call Select; retorna no r0 o caractere que quer mover
         ;imprimindo peça que sera movida
         loadn r2, #662
         outchar r0, r2
         
+        
         loadn r1,#'1'
-        sub r5,r0,r1; r5=r0-r1
-        loadn r7, #peca1 ;Endereço da peça 1    
-        add r7,r7,r5; soma a peca a ser mexida r7 = r7+r5
-        loadi r3,r7; carrega valor da peca ser mexida r3 =
-        cmp r3,r4
-        jeq move
+        sub r5,r0,r1; r5=r0-r1  ; Subtrai o caractere '1' do caractere recebido no select
+        loadn r7, #peca1        ; carrega Endereço da peça 1
+        add r7,r7,r5; soma o offset da peca  a ser mexida no endereço da peca1, r7 = r7+r5
+        loadi r3,r7; carrega valor da peca ser mexida r3 = MEM[r7]
+        cmp r3,r4 ; compara para ver se é a peça do jogador atual
+        jeq move ; se for jump para tentar mover
         loadn r0, #720
-        loadn r1, #msgN
+        loadn r1, #msgN; Imprime msg que  tentou mexer uma peça que não é sua
         loadn r2, #0
         call ImprimeStr
-        jmp selectMLoop
+        jmp selectMLoop ; loop para mexer outra peça
+        
         
     move:
         loadn r0, #680
         loadn r1, #msgM
         loadn r2, #0
-        call ImprimeStr
-        loadn r1,#'1'
-        
+        call ImprimeStr ; imprime msg de movimento
+
+        loadn r1,#'1'        
         call Select
         loadn r2, #702
-        outchar r0, r2
+        outchar r0, r2 ; imprime para onde tentara ser movido
         
         sub r3,r0,r1; r3-> offset do local para onde sera mexido
-        cmp r3,r5
+        cmp r3,r5 ; compara os offsets só para ter certeza que não vai tentar "mexer para o mesmo lugar"
         jne moveCase1
         localInvalido:
             loadn r0, #720
@@ -694,6 +689,7 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
             call ImprimeStr
             jmp selectMLoop
             
+            ;verifica se esta movendo a peça 1 e se a posição para onde vai mexer é adjacente a 1 (posições 2 e 8, a 9 é comum a todas, é tratada separadamente
         moveCase1:
             loadn r1, #0
             cmp r5, r1
@@ -706,7 +702,7 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
             jeq moveValido
             jmp moveSwitchFim
         
-        moveCase2:
+        moveCase2: ;idem case1
             loadn r1, #1
             cmp r5, r1
             jne moveCase3
@@ -790,29 +786,33 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
             jeq moveValido
             jmp moveSwitchFim
         
-        moveSwitchFim:
+        moveSwitchFim: ;se não for verifica se esta tentando mover para o local 9, onde todos os movimentos são validos
             loadn r1, #8
             cmp r3, r1
             
             jeq moveValido
-            jmp localInvalido
+            jmp localInvalido ; se não for nenhum dos casos o movimento é invalido
+        
         
         
         
     moveValido:
+        ;verifica se o local para onde esta tentando mover esta livre
         loadn r6,#peca1
         add r6, r6, r3;
         loadn r3, #'O'
         
         loadi r1, r6
         cmp r1,r3
-        jne localInvalido
+        jne localInvalido; se não for 'O' não é valido
         
+        ;coloca 'O' na peça que foi mexida
         storei r7, r3
-        load r3, jogador
+        load r3, jogador ;e o jogador atual para onde foi mexida
         storei r6,r3
-        call imprimePecas
+        call imprimePecas ;reimprime as peças. Poderia ter só trocado colocado para imprimir as peças que mudaram, mas a função estava pronta :v
         
+        ;limpa a tela de baixo das mensagens
         loadn r0, #640
         loadn r1, #LinhaBranco
         loadn r2, #0
@@ -822,10 +822,6 @@ SelectAndMove:;r7: endereco da peça que foi movida, r6 endereço da peça para 
         loadn r0, #720
         call ImprimeStr
 
-    
-        
-         
-    
     pop r7
     pop r6
     pop r5    ; Resgata os valores dos registradores utilizados na Subrotina da Pilha
