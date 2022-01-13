@@ -99,19 +99,21 @@ msgM: string "Selecione o movimento:                 "
 msgN: string "Essa nao eh a sua peca!                "
 msgI: string "Movimento Invalido                     "
 msgInvalido: string "Caractere Invalido                   "
-
-msg1: string "++++      SHISIMA     ++++              "
+msg0: string "                                       "
+msg1: string "      ++++      SHISIMA     ++++        "
 LinhaBranco: string "                                       "
-msg2: string " SHISIMA e um jogo de dois jogadores    "
-msg3: string " originado no Kenya. O objetivo do      "
-msg4: string " jogo e conseguir alinhar tres pecas    "
-msg5: string " passando pelo centro do tabuleiro.     "
-msg6: string " Porem so e possivel mover as pecas     "
-msg7: string " sobre as linhas tracadas.              "
-msg8: string " Parece um jogo simples, mas e          "
-msg9: string " necessario uma boa estrategia.         "
-msg10: string "      Pressione qualquer tecla para     "
-msg11: string "                INICIAR                 "
+msg2: string "    SHISIMA e um jogo de dois jogadores "
+msg3: string "    originado no Kenya. O objetivo do   "
+msg4: string "    jogo e conseguir alinhar tres pecas "
+msg5: string "    passando pelo centro do tabuleiro.  "
+msg6: string "    Porem so e possivel mover as pecas  "
+msg7: string "    sobre as linhas tracadas.           "
+LinhaBranco: string "                                       "
+msg8: string "     Parece um jogo simples, mas e      "
+msg9: string "     necessario uma boa estrategia.     "
+LinhaBranco: string "                                       "
+msg10: string "         Pressione qualquer tecla para  "
+msg11: string "                   INICIAR              "
 LinhaBranco1: string "                                       "
 LinhaBranco2: string "                                       "
 LinhaBranco3: string "                                       "
@@ -230,7 +232,7 @@ ImprimeStart: ;  Rotina de Impresao de Cenario na Tela Inteira
     push r4    ; protege o r4 na pilha para ser usado na subrotina
     push r5    ; protege o r5 na pilha para ser usado na subrotina
 
-    loadn R1, #msg1
+    loadn R1, #msg0
     loadn R2, #0
     loadn R0, #0      ; posicao inicial tem que ser o comeco da tela!
     loadn R3, #40      ; Incremento da posicao da tela!
