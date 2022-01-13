@@ -20,7 +20,7 @@ A partir desta ideia, começamos a montar o código em assembly e recriar o shis
 
 ## Como Jogar?
 
-Utilizando os numeros horizontais do teclado, cada jogador vai poder mover uma peça por turno. Para movimentar a peça, basta escolher o numero de sua posição para uma outra posição válida (marcadas como '0'). Vence aquele que formar uma linha na diagonal, vertical ou horizontal, com suas peças primeiro!
+Utilizando os numeros horizontais do teclado, cada jogador vai poder mover uma peça por turno. Para movimentar a peça, basta escolher o numero de sua posição para uma outra posição válida (marcadas como '0'). Vence aquele que formar uma linha na diagonal, vertical ou horizontal,passando pelo centro, com suas peças primeiro!
 
 E aí, bora jogar?
 
