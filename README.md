@@ -26,9 +26,7 @@ A partir desta ideia, começamos a montar o código em assembly e recriar o shis
 
 ![jogo](imgs/vitoria.jpeg)
 
-### Video explicativo
-
-[video_shisima](https://drive.google.com/file/d/14xThRkcezPfuNJVmAbiO33Yb6sYRBQc_/view?usp=sharing)
+### [Video explicativo](https://drive.google.com/file/d/14xThRkcezPfuNJVmAbiO33Yb6sYRBQc_/view?usp=sharing)
 
 
 
