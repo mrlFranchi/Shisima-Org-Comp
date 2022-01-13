@@ -15,12 +15,15 @@ Shisima é um jogo de tabuleiro típico do Kenya, jogado por duas pessoas. O mod
 A partir desta ideia, começamos a montar o código em assembly e recriar o shisima em sua versão gráfica
 
 1. Tela inicial
+
 ![jogo](imgs/home.jpeg)
 
 2. Tela no jogo
+
 ![jogo](imgs/jogo.jpeg)
 
 3. Tela de Vitoria
+
 ![jogo](imgs/vitoria.jpeg)
 
 ### Video explicativo
